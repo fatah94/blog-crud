@@ -80,7 +80,6 @@ class AccountController extends Controller
     {
         $model = new Account();
         $data = Yii::$app->request->post();
-        $data['Account']['role'] = 'author';
 
         if ($model->load($data) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->username]);
