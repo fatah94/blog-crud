@@ -14,6 +14,14 @@ use yii\filters\VerbFilter;
  */
 class PostController extends Controller
 {
+
+    public function init()
+    {    
+        if (Yii::$app->user->isGuest){
+            return Yii::$app->getResponse()->redirect(['/site/login']);
+        }
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -65,8 +73,10 @@ class PostController extends Controller
     public function actionCreate()
     {
         $model = new Post();
+        $data = Yii::$app->request->post();
+        $data['Post']['date'] = date("Y-m-d H:i:s");
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load($data) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->idpost]);
         }
 

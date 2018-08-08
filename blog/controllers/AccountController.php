@@ -3,10 +3,12 @@
 namespace app\controllers;
 
 use Yii;
+use yii\helpers\Url;
 use app\models\Account;
 use app\models\AccountSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\HttpException;
 use yii\filters\VerbFilter;
 
 /**
@@ -14,6 +16,18 @@ use yii\filters\VerbFilter;
  */
 class AccountController extends Controller
 {
+
+    public function init()
+    {
+        $role = Yii::$app->user->identity->role;
+
+        if(empty($role)){
+            return Yii::$app->getResponse()->redirect(['/site/login']);
+        }if($role != 'admin'){
+            throw new HttpException(401,'You are not allowed to access this page');
+        }
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -65,8 +79,10 @@ class AccountController extends Controller
     public function actionCreate()
     {
         $model = new Account();
+        $data = Yii::$app->request->post();
+        $data['Account']['role'] = 'author';
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load($data) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->username]);
         }
 
