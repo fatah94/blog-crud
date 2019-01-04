@@ -7,10 +7,13 @@ use Yii;
 /**
  * This is the model class for table "account".
  *
+ * @property int $id
  * @property string $username
- * @property string $password
- * @property string $name
+ * @property string $email
  * @property string $role
+ * @property string $password
+ * @property string $created_at
+ * @property string $updated_at
  *
  * @property Post[] $posts
  */
@@ -30,10 +33,10 @@ class Account extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'password', 'name', 'role'], 'required'],
-            [['username', 'name', 'role'], 'string', 'max' => 45],
-            [['password'], 'string', 'max' => 250],
-            [['username'], 'unique'],
+            [['username', 'email', 'password'], 'required'],
+            [['role'], 'string'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['username', 'email', 'password'], 'string', 'max' => 255],
         ];
     }
 
@@ -43,10 +46,13 @@ class Account extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'id' => 'ID',
             'username' => 'Username',
-            'password' => 'Password',
-            'name' => 'Name',
+            'email' => 'Email',
             'role' => 'Role',
+            'password' => 'Password',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
@@ -55,6 +61,6 @@ class Account extends \yii\db\ActiveRecord
      */
     public function getPosts()
     {
-        return $this->hasMany(Post::className(), ['username' => 'username']);
+        return $this->hasMany(Post::className(), ['user_id' => 'id']);
     }
 }

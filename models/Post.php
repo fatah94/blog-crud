@@ -7,13 +7,20 @@ use Yii;
 /**
  * This is the model class for table "post".
  *
- * @property int $idpost
+ * @property int $id
+ * @property int $user_id
  * @property string $title
- * @property string $content
- * @property string $date
- * @property string $username
+ * @property string $slug
+ * @property int $views
+ * @property string $image
+ * @property string $body
+ * @property int $published
+ * @property string $created_at
+ * @property string $updated_at
  *
- * @property Account $username0
+ * @property Account $user
+ * @property PostTopic[] $postTopics
+ * @property PostTopic[] $postTopics0
  */
 class Post extends \yii\db\ActiveRecord
 {
@@ -31,11 +38,13 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'content', 'date', 'username'], 'required'],
-            [['title', 'content'], 'string'],
-            [['date'], 'safe'],
-            [['username'], 'string', 'max' => 45],
-            [['username'], 'exist', 'skipOnError' => true, 'targetClass' => Account::className(), 'targetAttribute' => ['username' => 'username']],
+            [['user_id', 'views', 'published'], 'integer'],
+            [['title', 'slug', 'image', 'body', 'published'], 'required'],
+            [['body'], 'string'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['title', 'slug', 'image'], 'string', 'max' => 255],
+            [['slug'], 'unique'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Account::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -45,19 +54,40 @@ class Post extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idpost' => 'Idpost',
+            'id' => 'ID',
+            'user_id' => 'User ID',
             'title' => 'Title',
-            'content' => 'Content',
-            'date' => 'Date',
-            'username' => 'Username',
+            'slug' => 'Slug',
+            'views' => 'Views',
+            'image' => 'Image',
+            'body' => 'Body',
+            'published' => 'Published',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsername0()
+    public function getUser()
     {
-        return $this->hasOne(Account::className(), ['username' => 'username']);
+        return $this->hasOne(Account::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPostTopics()
+    {
+        return $this->hasMany(PostTopic::className(), ['post_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPostTopics0()
+    {
+        return $this->hasMany(PostTopic::className(), ['topic_id' => 'id']);
     }
 }

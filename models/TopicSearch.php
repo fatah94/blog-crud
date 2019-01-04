@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Post;
+use app\models\Topic;
 
 /**
- * PostSearch represents the model behind the search form of `app\models\Post`.
+ * TopicSearch represents the model behind the search form of `app\models\Topic`.
  */
-class PostSearch extends Post
+class TopicSearch extends Topic
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class PostSearch extends Post
     public function rules()
     {
         return [
-            [['id', 'user_id', 'views', 'published'], 'integer'],
-            [['title', 'slug', 'image', 'body', 'created_at', 'updated_at'], 'safe'],
+            [['id'], 'integer'],
+            [['name', 'slug'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class PostSearch extends Post
      */
     public function search($params)
     {
-        $query = Post::find();
+        $query = Topic::find();
 
         // add conditions that should always apply here
 
@@ -59,17 +59,10 @@ class PostSearch extends Post
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'views' => $this->views,
-            'published' => $this->published,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'slug', $this->slug])
-            ->andFilterWhere(['like', 'image', $this->image])
-            ->andFilterWhere(['like', 'body', $this->body]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'slug', $this->slug]);
 
         return $dataProvider;
     }

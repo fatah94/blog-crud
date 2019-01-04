@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Account;
@@ -18,7 +17,8 @@ class AccountSearch extends Account
     public function rules()
     {
         return [
-            [['username', 'password', 'name', 'role'], 'safe'],
+            [['id'], 'integer'],
+            [['username', 'email', 'role', 'password', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -57,10 +57,16 @@ class AccountSearch extends Account
         }
 
         // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ]);
+
         $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'password', $this->password])
-            ->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'role', $this->role]);
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'role', $this->role])
+            ->andFilterWhere(['like', 'password', $this->password]);
 
         return $dataProvider;
     }

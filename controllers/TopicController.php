@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Account;
-use app\models\AccountSearch;
+use app\models\Topic;
+use app\models\TopicSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AccountController implements the CRUD actions for Account model.
+ * TopicController implements the CRUD actions for Topic model.
  */
-class AccountController extends Controller
+class TopicController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class AccountController extends Controller
     }
 
     /**
-     * Lists all Account models.
+     * Lists all Topic models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new AccountSearch();
+        $searchModel = new TopicSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class AccountController extends Controller
     }
 
     /**
-     * Displays a single Account model.
+     * Displays a single Topic model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,13 +58,13 @@ class AccountController extends Controller
     }
 
     /**
-     * Creates a new Account model.
+     * Creates a new Topic model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Account();
+        $model = new Topic();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,7 +76,7 @@ class AccountController extends Controller
     }
 
     /**
-     * Updates an existing Account model.
+     * Updates an existing Topic model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,7 +96,7 @@ class AccountController extends Controller
     }
 
     /**
-     * Deletes an existing Account model.
+     * Deletes an existing Topic model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -110,15 +110,15 @@ class AccountController extends Controller
     }
 
     /**
-     * Finds the Account model based on its primary key value.
+     * Finds the Topic model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Account the loaded model
+     * @return Topic the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Account::findOne($id)) !== null) {
+        if (($model = Topic::findOne($id)) !== null) {
             return $model;
         }
 

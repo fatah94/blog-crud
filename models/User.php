@@ -1,43 +1,25 @@
 <?php
 
 namespace app\models;
-use yii\db\Query;
-use yii\web\IdentityInterface;
-use yii\base\BaseObject;
+
 use app\models\Account;
+use yii\web\IdentityInterface;
 
-class User extends BaseObject implements IdentityInterface
-{
-    public $username;
-    public $password;
-    public $name;
-    public $role;
+class User extends Account implements IdentityInterface {
 
-    public static function findOne($username)
-    {
-        $data = Account::find()->where(['username' => $username])->one();
-
-        $user = new User();
-        $user->username = $data['username'];
-        $user->password = $data['password'];
-        $user->name = $data['name'];
-        $user->role = $data['role'];
-
-        return $user;
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentity($id) {
+        return User::findOne($id);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
-    {
-        return static::findOne($id);
+    public static function findIdentityByAccessToken($token, $type = null) {
+        
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function findIdentityByAccessToken($token, $type = null){}
 
     /**
      * Finds user by username
@@ -45,28 +27,30 @@ class User extends BaseObject implements IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
-    {
-        return static::findOne($username);
+    public static function findByUsername($username) {
+        return User::findOne(['username' => $username]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->username;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAuthKey() {}
+    public function getAuthKey() {
+        
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function validateAuthKey($authKey) {}
+    public function validateAuthKey($authKey) {
+        
+    }
 
     /**
      * Validates password
@@ -74,8 +58,8 @@ class User extends BaseObject implements IdentityInterface
      * @param string $password password to validate
      * @return bool if password provided is valid for current user
      */
-    public function validatePassword($password)
-    {
+    public function validatePassword($password) {
         return $this->password === $password;
     }
+
 }
